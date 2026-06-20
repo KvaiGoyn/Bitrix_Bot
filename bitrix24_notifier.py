@@ -234,7 +234,10 @@ class Bitrix24Notifier:
             (текст сообщения, список attach-блоков)
         """
         bid = booking.get("id", "?")
+        comment = booking.get("comment")
         text = f"🟢 Новая бронь #{bid}"
+        if comment:
+            text += f"\n\n📝 Комментарий: {comment}"
         attach = self._build_attach_grid(booking)
         return text, attach
 
@@ -247,7 +250,10 @@ class Bitrix24Notifier:
         """
         bid = booking.get("id", "?")
         old_status_name = STATUS_NAMES.get(old_status, old_status)
+        comment = booking.get("comment")
         text = f"❌ Бронь отменена #{bid} (была: {old_status_name})"
+        if comment:
+            text += f"\n\n📝 Комментарий: {comment}"
         attach = self._build_attach_grid(booking)
         return text, attach
 
