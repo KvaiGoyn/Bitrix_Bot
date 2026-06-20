@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  smartshell-bot:
+    build: .
+    container_name: smartshell-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      # Персистентные данные (last_booking_id.txt, status_history.json)
+      - ./data:/app/data
+      # Таблица хостов (read-only, если не меняется)
+      - ./map.json:/app/map.json:ro
+    # Если боту нужно взаимодействовать с другими контейнерами — раскомментируйте:
+    # networks:
+    #   - your-existing-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Если используете внешнюю сеть — раскомментируйте:
+# networks:
+#   your-existing-network:
+#     external: true
